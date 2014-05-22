@@ -13,7 +13,7 @@
   "devDependencies": {
   },
   "repository": { "type": "git", "url": "git://github.com/kurunt/lull.git" },
-  "bugs": { "url" : "http://github.com/kurunt/kurunt/issues", "email" : "mail@kurunt.com" },
+  "bugs": { "url" : "http://github.com/kurunt/lull/issues", "email" : "mail@kurunt.com" },
   "engines": { "node": ">=0.8.0" },
   "license": "MIT",
   "keywords": [
