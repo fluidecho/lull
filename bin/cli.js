@@ -2,7 +2,6 @@
 //
 // Lull CLI (bin executable app)
 //
-// Version: 0.0.1
 // Author: Mark W. B. Ashcroft (mark [at] kurunt [dot] com)
 // License: MIT or Apache 2.0.
 //
