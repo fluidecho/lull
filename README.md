@@ -1,6 +1,6 @@
 # Lull
 
-Lull: Simple RESTful Web Service.  
+Simple RESTful Web Service, written for node.js.  
 
 __*IN DEV...__
 
