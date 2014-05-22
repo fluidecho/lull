@@ -72,7 +72,7 @@ var options = {
 };										// other settings: content_type, server.
 
 
-lull.createService(options, function(req, rep) {
+lull.createService(options, function(req, res) {
 	console.log('lull request.');
 
 	// returns: req.api{name, method, path[], properties{}}
@@ -84,22 +84,22 @@ lull.createService(options, function(req, rep) {
 		// example request GET: http://127.0.0.1:5555
 		case 'apiService':
 			console.log('apiService called ->');
-			rep.end(JSON.stringify(api));
+			res.end(JSON.stringify(api));
 			break;
 
 		// example request GET: http://127.0.0.1:5555/foo/
 		case 'getFoos':
 			console.log('getFoos called ->');
-			rep.write(JSON.stringify({'foo':foo}));		// wraped in 'foo' object so easier to understand foo array.
-			rep.end();
+			res.write(JSON.stringify({'foo':foo}));		// wraped in 'foo' object so easier to understand foo array.
+			res.end();
 			break;
 
 		// example request POST: http://127.0.0.1:5555/foo/bar/
 		case 'newFoo':
 			console.log('newFoo called ->');
-			foo.push({name: req.api.path[1], properties: req.api.properties});	// TODO: foo properties!
-			rep.write(JSON.stringify(foo[foo.length -1]));
-			rep.end();
+			foo.push({name: req.api.path[1], properties: {data: req.api.properties.data, query: req.api.properties.query} });
+			res.write(JSON.stringify(foo[foo.length -1]));		// echo the received data.
+			res.end();
 			break;
 
 		// example request GET: http://127.0.0.1:5555/foo/bar/
@@ -107,8 +107,8 @@ lull.createService(options, function(req, rep) {
 			console.log('getFoo called ->');
 			for ( var bar in foo ) {
 				if ( foo[bar] === req.api.path[1] ) {
-					rep.write(JSON.stringify(foo[bar]));
-					rep.end();				
+					res.write(JSON.stringify(foo[bar]));
+					res.end();				
 				}
 			}
 			break;
@@ -116,21 +116,21 @@ lull.createService(options, function(req, rep) {
 		// example request PUT: http://127.0.0.1:5555/foo/bar/
 		case 'updateFoo':
 			console.log('updateFoo called ->');
-			rep.write('hello from updateFoo\n');
-			rep.end();
+			res.write('hello from updateFoo\n');
+			res.end();
 			break;
 
 		// example request DELETE: http://127.0.0.1:5555/foo/bar/
 		case 'deleteFoo':
 			console.log('deleteFoo called ->');
-			rep.write('hello from deleteFoo\n');
-			rep.end();
+			res.write('hello from deleteFoo\n');
+			res.end();
 			break;
 
 		// example request GET: http://127.0.0.1:5555/hello/world/
 		case 'helloWorld':
 			console.log('helloWorld called ->');
-			rep.end('{"hello":"world"}');
+			res.end('{"hello":"world"}');
 			break;
 
 	};
