@@ -1,4 +1,5 @@
 var lull = require('./../');		// require('lull')
+var util = require('util');
 
 //
 // Example API:-
@@ -72,10 +73,11 @@ var options = {
 
 
 lull.createService(options, function(req, rep) {
-	console.log('respite request.');
+	console.log('lull request.');
 
 	// returns: req.api{name, method, path[], properties{}}
-
+	console.log('req.api: ' + util.inspect(req.api, true, 99, true));
+	
 	// example api foo app:
 	switch ( req.api.name ) {
 
@@ -95,7 +97,7 @@ lull.createService(options, function(req, rep) {
 		// example request POST: http://127.0.0.1:5555/foo/bar/
 		case 'newFoo':
 			console.log('newFoo called ->');
-			foo.push({name: req.api.path[1], properties: {x: 101}});	// TODO: foo properties!
+			foo.push({name: req.api.path[1], properties: req.api.properties});	// TODO: foo properties!
 			rep.write(JSON.stringify(foo[foo.length -1]));
 			rep.end();
 			break;
