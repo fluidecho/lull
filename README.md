@@ -74,19 +74,19 @@ console.log('request');
 var options = {
   hostname: '127.0.0.1',
   port: 5555,
-  path: '/hello/world/',
-  method: 'GET'
+  path: '/foo/bar/?hello=world',
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json; charset=utf-8',    // json formatted data.
+  } 
 };
 
-lull.request(options, function(res) {
-  console.log('STATUS: ' + res.statusCode);
-  console.log('HEADERS: ' + JSON.stringify(res.headers));
-  res.setEncoding('utf8');
-  res.on('data', function (chunk) {
-    console.log(JSON.parse(chunk));
-  }); 
+var req = lull.request(options, function(message) {
+  console.log('message received: ' + require('util').inspect(message, true, 99, true));
 });
 
+req.write('{"foo":"bar","x":982750}');    // sending json formatted data.
+req.end();
 ```
 
 ## License
