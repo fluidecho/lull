@@ -2,21 +2,12 @@
 
 Simple RESTful Web Service, written for node.js.  
 
-__*IN DEV...__
-
 ## Installation
 
 From your terminal, requires [node.js](http://nodejs.org/).
 
 ```
 npm install lull
-```
-Optionally install globally _-g_.  
-
-To generate a apikey:
-
-```
-lull --generateapikey
 ```
 
 ## Example web service
