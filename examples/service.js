@@ -1,5 +1,5 @@
 var lull = require('./../');		// require('lull')
-var util = require('util');
+var preview = require('preview')('service');
 
 //
 // Example API:-
@@ -66,37 +66,37 @@ var options = {
 	secure: false,			// true = https, else http. if true set: key, cert and apikey.
 	key: '',
 	cert: '',
-	apikey: '',					// can generate with: respite.generateApikey();  // or from console: respite --generateapikey  // store this apikey somewhere safe.
+	apikey: '',					// if secure true, this is matched 'authenticated' with client request.
 	access_hosts: [],		// can limit client request access to these hosts (ip), otherwise allow any.
 	api: api						// array mapping requests to js functions.
 };										// other settings: content_type, server.
 
 
 lull.createService(options, function(req, res) {
-	console.log('lull request.');
+	preview('lull request.');
 
 	// returns: req.api{name, method, path[], properties{}}
-	console.log('req.api: ' + util.inspect(req.api, true, 99, true));
+	preview('req.api', req.api);
 	
 	// example api foo app:
 	switch ( req.api.name ) {
 
 		// example request GET: http://127.0.0.1:5555
 		case 'apiService':
-			console.log('apiService called ->');
+			preview('apiService called ->');
 			res.end(JSON.stringify(api));
 			break;
 
 		// example request GET: http://127.0.0.1:5555/foo/
 		case 'getFoos':
-			console.log('getFoos called ->');
+			preview('getFoos called ->');
 			res.write(JSON.stringify({'foo':foo}));		// wraped in 'foo' object so easier to understand foo array.
 			res.end();
 			break;
 
 		// example request POST: http://127.0.0.1:5555/foo/bar/
 		case 'newFoo':
-			console.log('newFoo called ->');
+			preview('newFoo called ->');
 			foo.push({name: req.api.path[1], properties: {data: req.api.properties.data, query: req.api.properties.query} });
 			res.write(JSON.stringify(foo[foo.length -1]));		// echo the received data.
 			res.end();
@@ -104,9 +104,11 @@ lull.createService(options, function(req, res) {
 
 		// example request GET: http://127.0.0.1:5555/foo/bar/
 		case 'getFoo':
-			console.log('getFoo called ->');
+			preview('getFoo called ->');
+			preview('req.api.path[1]', req.api.path[1]);
 			for ( var bar in foo ) {
-				if ( foo[bar] === req.api.path[1] ) {
+				preview('foo[bar]', foo[bar]);
+				if ( foo[bar].name === req.api.path[1] ) {
 					res.write(JSON.stringify(foo[bar]));
 					res.end();				
 				}
@@ -115,25 +117,43 @@ lull.createService(options, function(req, res) {
 
 		// example request PUT: http://127.0.0.1:5555/foo/bar/
 		case 'updateFoo':
-			console.log('updateFoo called ->');
-			res.write('hello from updateFoo\n');
-			res.end();
+			preview('updateFoo called ->');
+			for ( var bar in foo ) {
+				if ( foo[bar].name === req.api.path[1] ) {
+					// update this
+					foo[bar] = {name: req.api.path[1], properties: {data: req.api.properties.data, query: req.api.properties.query} };
+					res.write(JSON.stringify(foo[bar]));
+					res.end();				
+				}
+			}			
 			break;
 
 		// example request DELETE: http://127.0.0.1:5555/foo/bar/
 		case 'deleteFoo':
-			console.log('deleteFoo called ->');
-			res.write('hello from deleteFoo\n');
-			res.end();
+			preview('deleteFoo called ->');
+			for ( var bar in foo ) {
+				if ( foo[bar].name === req.api.path[1] ) {
+					// delete this
+					foo.splice(bar, 1);
+					res.write('{}');
+					res.end();				
+				}
+			}
 			break;
 
 		// example request GET: http://127.0.0.1:5555/hello/world/
 		case 'helloWorld':
-			console.log('helloWorld called ->');
+			preview('helloWorld called ->');
 			res.end('{"hello":"world"}');
 			break;
 
 	};
+	
+	try {
+		res.end('{"foo":"nada"}');		// if none.
+	} catch(e) {
+	}
+	preview('FOO', 'foo', foo);
 
 });
 console.log('lull web service running at: ' + options.host + ':' + options.port);

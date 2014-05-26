@@ -1,14 +1,14 @@
 {
   "name": "lull",
   "description": "Simple RESTful Web Service.",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "main": "index.js",
   "bin" : { "lull" : "bin/cli.js" },
   "homepage": "https://github.com/kurunt/lull",
   "author": "Mark W. B. Ashcroft <mark@kurunt.com> (http://kurunt.com)",
   "contributors": [ { "name": "Mark W. B. Ashcroft", "email": "mark@kurunt.com" } ],
   "dependencies": {
-    "minimist": "~0.0.8"
+    "preview": "~0.0.5"
   },
   "devDependencies": {
   },
